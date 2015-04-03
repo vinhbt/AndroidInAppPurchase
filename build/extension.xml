@@ -1,4 +1,4 @@
-<extension xmlns="http://ns.adobe.com/air/extension/4.0">
+<extension xmlns="http://ns.adobe.com/air/extension/3.9">
   <id>com.pozirk.AndroidInAppPurchase</id>
   <versionNumber>1</versionNumber>
   <platforms>

@@ -7,6 +7,14 @@
     <!-- All -->
     <target name="all" depends="android,swc,package" description="Full build of extension"/>
 
+    <target name="aidl" description="build aidl">
+     <exec executable="${android.aidl}" failonerror="true" dir="../android/">
+            <arg line="-p${android.sdk}/framework.aidl"/>
+            <arg line="-o./gen"/>
+            <arg line="./src/com/android/vending/billing/IInAppBillingService.aidl"/>
+        </exec>
+    </target>
+
     <!-- Android -->
     <target name="android" description="Build Android Library">
         <delete dir="../android/temp"/>
@@ -18,10 +26,11 @@
         	<arg line="./src/com/android/vending/billing/IInAppBillingService.aidl"/>
         </exec>
 
-        <javac source="1.6" srcdir="../android/src;../android/gen" destdir="../android/temp/classes" includeantruntime="false">
+        <javac source="1.6" target="1.6" srcdir="../android/src;../android/gen" destdir="../android/temp/classes" includeantruntime="false" failonerror="true">
             <classpath>
                 <pathelement location="${android.sdk}/android.jar"/>
                 <pathelement location="${flex.sdk}/lib/android/FlashRuntimeExtensions.jar"/>
+                <pathelement location="../android/libs/android-support-v4.jar"/>
             </classpath>
         </javac>
 
@@ -46,13 +55,12 @@
             <env key="AIR_SDK_HOME" value="${flex.sdk}"/>
             <arg line='-source-path ../actionscript/src'/>
             <arg line='-output ../temp/swc/${name}.swc'/>
-            <arg line='-swf-version=14'/>
+            <arg line='-swf-version=20'/>
             <arg line='-external-library-path+="${flex.sdk}/frameworks/libs/air/airglobal.swc"'/>
             <arg line='-include-classes ${classlist}'/>
         </exec>
 
         <unzip src="../temp/swc/${name}.swc" dest="../temp/swc/content" overwrite="true"/>
-        <copy file="../temp/swc/content/library.swf" todir="../temp/ios" overwrite="true"/>
         <copy file="../temp/swc/content/library.swf" todir="../temp/android" overwrite="true"/>
         <copy file="../temp/swc/content/library.swf" todir="../temp/default" overwrite="true"/>
         <delete dir="../temp/swc/content/"/>
